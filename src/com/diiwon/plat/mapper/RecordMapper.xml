@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.diiwon.plat.dao.RecordMapper" >
+  <resultMap id="BaseResultMap" type="com.diiwon.plat.model.Record" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tid" property="tid" jdbcType="INTEGER" />
+    <result column="rdate" property="rdate" jdbcType="VARCHAR" />
+    <result column="raction" property="raction" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tid, rdate, raction
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getAllByTid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from record r where r.tid=#{0}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.diiwon.plat.model.Record" >
+    insert into record (id, tid, rdate, 
+      raction)
+    values (#{id,jdbcType=INTEGER}, #{tid,jdbcType=INTEGER}, #{rdate,jdbcType=VARCHAR}, 
+      #{raction,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.diiwon.plat.model.Record" >
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tid != null" >
+        tid,
+      </if>
+      <if test="rdate != null" >
+        rdate,
+      </if>
+      <if test="raction != null" >
+        raction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tid != null" >
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="rdate != null" >
+        #{rdate,jdbcType=VARCHAR},
+      </if>
+      <if test="raction != null" >
+        #{raction,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.diiwon.plat.model.Record" >
+    update record
+    <set >
+      <if test="tid != null" >
+        tid = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="rdate != null" >
+        rdate = #{rdate,jdbcType=VARCHAR},
+      </if>
+      <if test="raction != null" >
+        raction = #{raction,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.diiwon.plat.model.Record" >
+    update record
+    set tid = #{tid,jdbcType=INTEGER},
+      rdate = #{rdate,jdbcType=VARCHAR},
+      raction = #{raction,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 引入配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 引入c3p0数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="initialPoolSize" value="10"></property>
+		<property name="maxPoolSize" value="30"></property>
+	</bean>
+	<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 读取mybatis的配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+
+	<!-- 配置mapper 自动扫描dao接口 	生成对应的代理对象-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.diiwon.plat.dao"></property>
+	</bean>
+	
+	<!-- 配置事务 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 管数据源的，配置数据源 -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置事务属性 -->
+	<tx:advice id="txAdice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置切面 -->
+	<!-- <aop:config>
+		<aop:pointcut expression="execution(* com.diiwon.plat.service.impl.*.*(..))" id="pt"/>
+		<aop:advisor advice-ref="txAdice" pointcut-ref="pt"/>
+	</aop:config> -->
+	
+	<!-- 开启事物注解 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	<!-- 开启自动扫描包 -->
+	<context:component-scan base-package="com.diiwon.plat.dao,com.diiwon.plat.service.impl"></context:component-scan>
+	
+	<!-- 支持文件上传 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+         <!-- 请求编码格式 -->  
+         <property name="defaultEncoding" value="utf-8"></property>  
+         <!-- 上传文件大小(单位:字节) -->  
+         <property name="maxUploadSize" value="50000000"></property>  
+         <!-- 缓冲区大小(单位:KB) -->  
+         <property name="maxInMemorySize" value="1024"></property>  
+    </bean>  
+</beans>

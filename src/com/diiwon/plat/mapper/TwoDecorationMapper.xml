@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.diiwon.plat.dao.TwoDecorationMapper">
+	<resultMap id="BaseResultMap" type="com.diiwon.plat.model.TwoDecoration">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="number" property="number" jdbcType="VARCHAR" />
+		<result column="engName" property="engname" jdbcType="VARCHAR" />
+		<result column="engPositionQu" property="engpositionqu"
+			jdbcType="VARCHAR" />
+		<result column="engPositionLu" property="engpositionlu"
+			jdbcType="VARCHAR" />
+		<result column="engPositionHao" property="engpositionhao"
+			jdbcType="VARCHAR" />
+		<result column="cateOfInves" property="cateofinves" jdbcType="VARCHAR" />
+		<result column="budgetCost" property="budgetcost" jdbcType="VARCHAR" />
+		<result column="buildArea" property="buildarea" jdbcType="VARCHAR" />
+		<result column="structuralevel" property="structuralevel"
+			jdbcType="VARCHAR" />
+		<result column="costMeter" property="costmeter" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="info" property="info" jdbcType="VARCHAR" />
+		<result column="detailInfo" property="detailinfo" jdbcType="VARCHAR" />
+		<result column="htState" property="htstate" jdbcType="VARCHAR" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="htPath" property="htpath" jdbcType="VARCHAR" />
+		<result column="supervisionLv" property="supervisionlv"
+			jdbcType="VARCHAR" />
+		<result column="supervisionNum" property="supervisionnum"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, uid, type, number, engName, engPositionQu,
+		engPositionLu,
+		engPositionHao, cateOfInves,
+		budgetCost, buildArea,
+		structuralevel, costMeter, state, info, detailInfo,
+		htState,
+		path,
+		htPath, supervisionLv, supervisionNum
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from twodecoration
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getByUid" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.uid=#{0}
+	</select>
+
+	<select id="getAll" resultMap="BaseResultMap">
+		select * from twodecoration;
+	</select>
+	<select id="getByType" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.type=#{0}
+	</select>
+	<select id="getByState" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.state=#{0}
+	</select>
+
+	<select id="getByHTState" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.htState=#{0}
+	</select>
+	<select id="getByTypeAndState" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.type=#{0} and
+		t.state=#{1}
+	</select>
+	
+	<select id="getByUidAndTypeAndState" resultMap="BaseResultMap">
+		select * from twodecoration t where t.uid=#{0} and t.type=#{1} and
+		t.state=#{2}
+	</select>
+
+	<select id="getByTypeAndStateAndHtState" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from twodecoration t where t.type=#{0} and
+		t.state=#{1} and
+		t.htState=#{2}
+	</select>
+
+	<select id="getEndGC" resultMap="BaseResultMap">
+		SELECT t.* FROM user u INNER JOIN twodecoration t ON
+  			u.id=t.uid WHERE t.uid=#{0} AND u.code!='' AND t.state='审批通过' AND t.htState='审批通过';
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		twodecoration
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.diiwon.plat.model.TwoDecoration">
+		insert into twodecoration (id,
+		uid, type,
+		number, engName, engPositionQu,
+		engPositionLu,
+		engPositionHao, cateOfInves,
+		budgetCost, buildArea, structuralevel,
+		costMeter, state, info,
+		detailInfo, htState, path,
+		htPath,
+		supervisionLv, supervisionNum
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{uid,jdbcType=INTEGER},
+		#{type,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR}, #{engname,jdbcType=VARCHAR},
+		#{engpositionqu,jdbcType=VARCHAR},
+		#{engpositionlu,jdbcType=VARCHAR},
+		#{engpositionhao,jdbcType=VARCHAR},
+		#{cateofinves,jdbcType=VARCHAR},
+		#{budgetcost,jdbcType=VARCHAR}, #{buildarea,jdbcType=VARCHAR},
+		#{structuralevel,jdbcType=VARCHAR},
+		#{costmeter,jdbcType=VARCHAR},
+		#{state,jdbcType=VARCHAR},
+		#{info,jdbcType=VARCHAR},
+		#{detailinfo,jdbcType=VARCHAR}, #{htstate,jdbcType=VARCHAR},
+		#{path,jdbcType=VARCHAR},
+		#{htpath,jdbcType=VARCHAR},
+		#{supervisionlv,jdbcType=VARCHAR},
+		#{supervisionnum,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.diiwon.plat.model.TwoDecoration">
+		insert into twodecoration
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="number != null">
+				number,
+			</if>
+			<if test="engname != null">
+				engName,
+			</if>
+			<if test="engpositionqu != null">
+				engPositionQu,
+			</if>
+			<if test="engpositionlu != null">
+				engPositionLu,
+			</if>
+			<if test="engpositionhao != null">
+				engPositionHao,
+			</if>
+			<if test="cateofinves != null">
+				cateOfInves,
+			</if>
+			<if test="budgetcost != null">
+				budgetCost,
+			</if>
+			<if test="buildarea != null">
+				buildArea,
+			</if>
+			<if test="structuralevel != null">
+				structuralevel,
+			</if>
+			<if test="costmeter != null">
+				costMeter,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="info != null">
+				info,
+			</if>
+			<if test="detailinfo != null">
+				detailInfo,
+			</if>
+			<if test="htstate != null">
+				htState,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="htpath != null">
+				htPath,
+			</if>
+			<if test="supervisionlv != null">
+				supervisionLv,
+			</if>
+			<if test="supervisionnum != null">
+				supervisionNum,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="number != null">
+				#{number,jdbcType=VARCHAR},
+			</if>
+			<if test="engname != null">
+				#{engname,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionqu != null">
+				#{engpositionqu,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionlu != null">
+				#{engpositionlu,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionhao != null">
+				#{engpositionhao,jdbcType=VARCHAR},
+			</if>
+			<if test="cateofinves != null">
+				#{cateofinves,jdbcType=VARCHAR},
+			</if>
+			<if test="budgetcost != null">
+				#{budgetcost,jdbcType=VARCHAR},
+			</if>
+			<if test="buildarea != null">
+				#{buildarea,jdbcType=VARCHAR},
+			</if>
+			<if test="structuralevel != null">
+				#{structuralevel,jdbcType=VARCHAR},
+			</if>
+			<if test="costmeter != null">
+				#{costmeter,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=VARCHAR},
+			</if>
+			<if test="info != null">
+				#{info,jdbcType=VARCHAR},
+			</if>
+			<if test="detailinfo != null">
+				#{detailinfo,jdbcType=VARCHAR},
+			</if>
+			<if test="htstate != null">
+				#{htstate,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				#{path,jdbcType=VARCHAR},
+			</if>
+			<if test="htpath != null">
+				#{htpath,jdbcType=VARCHAR},
+			</if>
+			<if test="supervisionlv != null">
+				#{supervisionlv,jdbcType=VARCHAR},
+			</if>
+			<if test="supervisionnum != null">
+				#{supervisionnum,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.diiwon.plat.model.TwoDecoration">
+		update twodecoration
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="number != null">
+				number = #{number,jdbcType=VARCHAR},
+			</if>
+			<if test="engname != null">
+				engName = #{engname,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionqu != null">
+				engPositionQu = #{engpositionqu,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionlu != null">
+				engPositionLu = #{engpositionlu,jdbcType=VARCHAR},
+			</if>
+			<if test="engpositionhao != null">
+				engPositionHao = #{engpositionhao,jdbcType=VARCHAR},
+			</if>
+			<if test="cateofinves != null">
+				cateOfInves = #{cateofinves,jdbcType=VARCHAR},
+			</if>
+			<if test="budgetcost != null">
+				budgetCost = #{budgetcost,jdbcType=VARCHAR},
+			</if>
+			<if test="buildarea != null">
+				buildArea = #{buildarea,jdbcType=VARCHAR},
+			</if>
+			<if test="structuralevel != null">
+				structuralevel = #{structuralevel,jdbcType=VARCHAR},
+			</if>
+			<if test="costmeter != null">
+				costMeter = #{costmeter,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=VARCHAR},
+			</if>
+			<if test="info != null">
+				info = #{info,jdbcType=VARCHAR},
+			</if>
+			<if test="detailinfo != null">
+				detailInfo = #{detailinfo,jdbcType=VARCHAR},
+			</if>
+			<if test="htstate != null">
+				htState = #{htstate,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				path = #{path,jdbcType=VARCHAR},
+			</if>
+			<if test="htpath != null">
+				htPath = #{htpath,jdbcType=VARCHAR},
+			</if>
+			<if test="supervisionlv != null">
+				supervisionLv = #{supervisionlv,jdbcType=VARCHAR},
+			</if>
+			<if test="supervisionnum != null">
+				supervisionNum = #{supervisionnum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.diiwon.plat.model.TwoDecoration">
+		update
+		twodecoration
+		set uid = #{uid,jdbcType=INTEGER},
+		type =
+		#{type,jdbcType=VARCHAR},
+		number = #{number,jdbcType=VARCHAR},
+		engName =
+		#{engname,jdbcType=VARCHAR},
+		engPositionQu =
+		#{engpositionqu,jdbcType=VARCHAR},
+		engPositionLu =
+		#{engpositionlu,jdbcType=VARCHAR},
+		engPositionHao =
+		#{engpositionhao,jdbcType=VARCHAR},
+		cateOfInves =
+		#{cateofinves,jdbcType=VARCHAR},
+		budgetCost =
+		#{budgetcost,jdbcType=VARCHAR},
+		buildArea =
+		#{buildarea,jdbcType=VARCHAR},
+		structuralevel =
+		#{structuralevel,jdbcType=VARCHAR},
+		costMeter =
+		#{costmeter,jdbcType=VARCHAR},
+		state = #{state,jdbcType=VARCHAR},
+		info =
+		#{info,jdbcType=VARCHAR},
+		detailInfo = #{detailinfo,jdbcType=VARCHAR},
+		htState = #{htstate,jdbcType=VARCHAR},
+		path = #{path,jdbcType=VARCHAR},
+		htPath = #{htpath,jdbcType=VARCHAR},
+		supervisionLv =
+		#{supervisionlv,jdbcType=VARCHAR},
+		supervisionNum =
+		#{supervisionnum,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
